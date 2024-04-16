@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.no-tailwind * {
+    all: revert;
+}
+
+._contentEditable_13kqw_352 * {
+    all: revert;
+}
