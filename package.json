@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdxeditor/editor": "^2.20.3",
+    "chroma-js": "^2.4.2",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.8.0",
     "marked": "^12.0.1",
@@ -17,9 +18,12 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.3",
-    "react-markdown": "^9.0.1"
+    "react-icons": "^5.1.0",
+    "react-markdown": "^9.0.1",
+    "react-select": "^5.8.0"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.4.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

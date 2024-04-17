@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Revert Tailwind css reset css */
 .no-tailwind * {
     all: revert;
 }

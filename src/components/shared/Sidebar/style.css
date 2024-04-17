@@ -1,0 +1,7 @@
+.active {
+    background-color: #334155;
+}
+
+.active .link-icon{
+    color: white;
+}
