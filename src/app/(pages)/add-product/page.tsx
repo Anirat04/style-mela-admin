@@ -19,6 +19,7 @@ type Inputs = {
     price: string;
     discount: number;
     listingCategory: []
+    images: []
 };
 
 
@@ -62,9 +63,10 @@ const AddProduct = () => {
             })
         );
 
-        setGetImageArray(uploadedImageURLs);
+        // setGetImageArray(uploadedImageURLs);
+        return uploadedImageURLs;
     };
-    console.log(getImageArray);
+    // console.log(getImageArray);
 
     function updateFileProgress(key: string, progress: FileState['progress']) {
         setFileStates((fileStates) => {
@@ -103,9 +105,11 @@ const AddProduct = () => {
         formState: { errors },
     } = useForm<Inputs>();
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-        setFormData(data);
-        // console.log(data);
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        const uploadedImageURLs = await handleUploadImages(); // Get the uploaded images array
+        const updatedData = { ...data, images: uploadedImageURLs };
+        console.log(uploadedImageURLs); // Include images in form data
+        await setFormData(updatedData); // Set the updated form data
     };
 
     // For Color Select component
@@ -168,7 +172,7 @@ const AddProduct = () => {
         { value: 'Zinc', label: 'Zinc' },
     ]
 
-    // console.log(formData);
+    console.log(formData);
     return (
         <>
             <div
@@ -180,7 +184,24 @@ const AddProduct = () => {
                         {/* Image Uploading Div */}
                         <div>
                             <div>
-                                <input type="file" />
+                                <div>
+                                    <Controller
+                                        name="images"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <MultiImageDropzone
+                                                value={fileStates}
+                                                dropzoneOptions={{
+                                                    maxFiles: 6,
+                                                }}
+                                                onChange={(files) => {
+                                                    setFileStates(files);
+                                                    field.onChange(files);
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -283,7 +304,7 @@ const AddProduct = () => {
                     </form>
                 </div>
 
-                <div>
+                {/* <div>
                     <MultiImageDropzone
                         value={fileStates}
                         dropzoneOptions={{
@@ -301,7 +322,7 @@ const AddProduct = () => {
                     >
                         Upload
                     </button>
-                </div>
+                </div> */}
             </div>
         </>
     );
