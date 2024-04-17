@@ -5,6 +5,9 @@ import Select, { StylesConfig } from 'react-select';
 import { ColourOption, colourOptions } from '../../../data/colorsData'
 import { categoryData } from '../../../data/categoryData'
 import chroma from "chroma-js";
+import { useEdgeStore } from '@/lib/edgestore';
+import { SingleImageDropzone } from '@/components/ImageUpload/single-image-dropzone';
+import { FileState, MultiImageDropzone } from '@/components/ImageUpload/multi-image-dropzone';
 
 // TODO: Ensure real data matching
 type Inputs = {
@@ -25,8 +28,59 @@ const AddProduct = () => {
     const [initPrice, setInitPrice] = useState<number>();
     const [discountPrice, setDiscountPrice] = useState<number>();
     const [finalPrice, setFinalPrice] = useState(initPrice);
-    console.log(initPrice);
-    console.log(discountPrice);
+    // console.log(initPrice);
+    // console.log(discountPrice);
+
+    // for multiple images upload
+    const [getImageArray, setGetImageArray] = useState<{ url: string; thumbnail?: boolean }[]>([]);
+    const [fileStates, setFileStates] = useState<FileState[]>([]);
+    const { edgestore } = useEdgeStore();
+
+    // Function to handle image upload
+    const handleUploadImages = async () => {
+        const uploadedImageURLs: { url: string; thumbnail?: boolean }[] = [];
+
+        await Promise.all(
+            fileStates.map(async (fileState, index) => {
+                try {
+                    const res = await edgestore.publicFiles.upload({
+                        file: fileState.file,
+                        onProgressChange: async (progress) => {
+                            updateFileProgress(fileState.key, progress);
+                            if (progress === 100) {
+                                await new Promise((resolve) => setTimeout(resolve, 1000));
+                                updateFileProgress(fileState.key, 'COMPLETE');
+                            }
+                        },
+                    });
+                    // console.log(res);
+                    // console.log(res.url);
+                    uploadedImageURLs.push({ url: res.url, thumbnail: index === 0 });
+                } catch (err) {
+                    updateFileProgress(fileState.key, 'ERROR');
+                }
+            })
+        );
+
+        setGetImageArray(uploadedImageURLs);
+    };
+    console.log(getImageArray);
+
+    function updateFileProgress(key: string, progress: FileState['progress']) {
+        setFileStates((fileStates) => {
+            const newFileStates = [...fileStates];
+            const fileStateIndex = newFileStates.findIndex((fileState) => fileState.key === key);
+            if (fileStateIndex !== -1) {
+                newFileStates[fileStateIndex] = {
+                    ...newFileStates[fileStateIndex],
+                    progress: progress,
+                };
+            }
+            return newFileStates;
+        });
+    }
+    // Image Uploads ends
+
 
     const handleFinalPrice = (initPrice: number, discountPrice: number) => {
         const getFinalPrice = initPrice * (1 - discountPrice / 100);
@@ -114,7 +168,7 @@ const AddProduct = () => {
         { value: 'Zinc', label: 'Zinc' },
     ]
 
-    console.log(formData);
+    // console.log(formData);
     return (
         <>
             <div
@@ -123,6 +177,13 @@ const AddProduct = () => {
                 {/* Form Container */}
                 <div className='bg-white max-w-[1200px] mx-auto p-8 mt-8 border rounded-xl shadow-lg'>
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        {/* Image Uploading Div */}
+                        <div>
+                            <div>
+                                <input type="file" />
+                            </div>
+                        </div>
+
                         {/* Title */}
                         <div>
                             <input defaultValue="" placeholder='Type your title here' {...register("title")} />
@@ -220,6 +281,26 @@ const AddProduct = () => {
                         </div>
                         <input type="submit" />
                     </form>
+                </div>
+
+                <div>
+                    <MultiImageDropzone
+                        value={fileStates}
+                        dropzoneOptions={{
+                            maxFiles: 7,
+                        }}
+                        onChange={(files) => {
+                            setFileStates(files);
+                        }}
+                        onFilesAdded={(addedFiles) => {
+                            setFileStates([...fileStates, ...addedFiles]);
+                        }}
+                    />
+                    <button
+                        onClick={handleUploadImages}
+                    >
+                        Upload
+                    </button>
                 </div>
             </div>
         </>

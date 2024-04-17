@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/components/shared/NavBar/NavBar";
 import Sidebar from "@/components/shared/Sidebar/Sidebar";
 import FlowBiteInit from "@/utils/FlowBiteInit";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,9 @@ export default function RootLayout({
         <NavBar></NavBar>
         <Sidebar></Sidebar>
         <div className="mt-16 sm:mt-14 sm:ml-64">
-          {children}
+          <EdgeStoreProvider>
+            {children}
+          </EdgeStoreProvider>
         </div>
       </body>
     </html>

@@ -9,18 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
     "@mdxeditor/editor": "^2.20.3",
     "chroma-js": "^2.4.2",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.8.0",
+    "lucide-react": "^0.370.0",
     "marked": "^12.0.1",
     "next": "14.2.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.3",
     "react-icons": "^5.1.0",
     "react-markdown": "^9.0.1",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "tailwind-merge": "^2.2.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/chroma-js": "^2.4.4",
