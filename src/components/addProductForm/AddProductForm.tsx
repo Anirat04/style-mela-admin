@@ -8,6 +8,7 @@ import { useEdgeStore } from '@/lib/edgestore';
 import { FileState, MultiImageDropzone } from '@/components/ImageUpload/multi-image-dropzone';
 import { ColourOption, colourOptions } from '@/data/colorsData';
 import { categoryData } from '@/data/categoryData';
+import DescriptionComponent from '../DescriptionComponent/DescriptionComponent';
 
 
 // TODO: Ensure real data matching
@@ -31,6 +32,7 @@ type Inputs = {
     price: string;
     discount: number;
     listingCategory: [];
+    description: string;
 };
 
 const AddProductForm = () => {
@@ -38,11 +40,12 @@ const AddProductForm = () => {
     const [initPrice, setInitPrice] = useState<number>();
     const [discountPrice, setDiscountPrice] = useState<number>();
     const [finalPrice, setFinalPrice] = useState(initPrice);
+    const [receivedValue, setReceivedValue] = useState('');
+    const [updatedFormData, setUpdatedFormData] = useState({ ...formData });
     // console.log(initPrice);
     // console.log(discountPrice);
 
     // for multiple images upload
-    const [getImageArray, setGetImageArray] = useState<{ url: string; thumbnail?: boolean }[]>([]);
     const [fileStates, setFileStates] = useState<FileState[]>([]);
     const { edgestore } = useEdgeStore();
 
@@ -92,11 +95,26 @@ const AddProductForm = () => {
     }
     // Image Uploads ends
 
+    // For receiving markdown
+
+    const handleValueReceived = (value: any) => {
+        setReceivedValue(value);
+    };
+    // console.log(receivedValue);
+    useEffect(() => {
+        // Update the description field in the formData with the receivedValue
+        setUpdatedFormData(formData => ({
+            ...formData,
+            description: receivedValue
+        }));
+    }, [receivedValue])
+
+
 
     const handleFinalPrice = (initPrice: number, discountPrice: number) => {
         const getFinalPrice = initPrice * (1 - discountPrice / 100);
         setFinalPrice(getFinalPrice);
-        console.log("This is final", getFinalPrice);
+        // console.log("This is final", getFinalPrice);
     }
 
     // Call handleFinalPrice whenever initPrice or discountPrice changes
@@ -115,9 +133,15 @@ const AddProductForm = () => {
     } = useForm<Inputs>();
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        const uploadedImageURLs = await handleUploadImages(); // Get the uploaded images array
-        const updatedData = { ...data, images: uploadedImageURLs };
-        console.log(uploadedImageURLs); // Include images in form data
+        // Step 1: Get the uploaded image URLs
+        const uploadedImageURLs = await handleUploadImages();
+
+        // Step 2: Include the received description in form data
+        const updatedData = {
+            ...data,
+            images: uploadedImageURLs, // Include uploaded images
+            description: receivedValue // Include received description
+        };
         await setFormData(updatedData); // Set the updated form data
     };
 
@@ -329,6 +353,12 @@ const AddProductForm = () => {
                         value={finalPrice !== undefined ? finalPrice.toString() : ''}
                     />
                 </div>
+                {/* Description editor starts here */}
+                <div>
+                    <DescriptionComponent sendValueToParent={handleValueReceived} ></DescriptionComponent>
+                </div>
+                {/* Description editor ends here */}
+
                 <input type="submit" />
             </form>
         </div>

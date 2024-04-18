@@ -11,18 +11,22 @@ import marked from 'marked';
 // `
 
 
-const DescriptionComponent = () => {
+const DescriptionComponent = ({ sendValueToParent }) => {
     const [markdown, setMarkdown] = useState(`
         Hello **world**!
     `);
 
+
+
     // Function to handle change in Markdown content
     const handleMarkdownChange = async (newMarkdown: React.SetStateAction<string>) => {
         await setMarkdown(newMarkdown);
-        console.log(newMarkdown); // Logging the updated Markdown content
+        await sendValueToParent(newMarkdown);
+        // console.log(newMarkdown); // Logging the updated Markdown content
     };
 
-    console.log(markdown);
+
+    // console.log(markdown);
 
     const postData = async () => {
         try {
@@ -61,17 +65,17 @@ const DescriptionComponent = () => {
                 >
                 </ForwardRefEditor>
             </div>
-            <div className='border max-w-[1000px] mx-auto no-tailwind'>
+            {/* <div className='border max-w-[1000px] mx-auto no-tailwind'>
                 <Markdown>{markdown}</Markdown>
-            </div>
-            <div className='border max-w-[1000px] mx-auto no-tailwind mt-8'>
+            </div> */}
+            {/* <div className='border max-w-[1000px] mx-auto no-tailwind mt-8'>
                 <button
                     className=''
                     onClick={postData}
                 >
                     Submit
                 </button>
-            </div>
+            </div> */}
         </div >
     );
 };
