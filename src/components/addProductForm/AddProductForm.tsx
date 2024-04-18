@@ -11,16 +11,26 @@ import { categoryData } from '@/data/categoryData';
 
 
 // TODO: Ensure real data matching
+// type Inputs = {
+//     title: string;
+//     shortDescription: string;
+//     colors: { value: {}; label: string }[]; // Adjusted type for colors
+//     brand: string;
+//     materials: string;
+//     price: string;
+//     discount: number;
+//     listingCategory: []
+//     images: []
+// };
 type Inputs = {
-    title: string;
-    shortDescription: string;
-    colors: { value: {}; label: string }[]; // Adjusted type for colors
+    images: { url: string; thumbnail?: boolean | undefined; }[];
+    title: string; shortDescription: string;
+    colors: { value: {}; label: string; }[];
     brand: string;
     materials: string;
     price: string;
     discount: number;
-    listingCategory: []
-    images: []
+    listingCategory: [];
 };
 
 const AddProductForm = () => {
@@ -43,19 +53,19 @@ const AddProductForm = () => {
         await Promise.all(
             fileStates.map(async (fileState, index) => {
                 try {
-                    const res = await edgestore.publicFiles.upload({
-                        file: fileState.file,
-                        onProgressChange: async (progress) => {
-                            updateFileProgress(fileState.key, progress);
-                            if (progress === 100) {
-                                await new Promise((resolve) => setTimeout(resolve, 1000));
-                                updateFileProgress(fileState.key, 'COMPLETE');
-                            }
-                        },
-                    });
-                    // console.log(res);
-                    // console.log(res.url);
-                    uploadedImageURLs.push({ url: res.url, thumbnail: index === 0 });
+                    if (typeof fileState.file !== 'string') { // Check if file is not a string
+                        const res = await edgestore.publicFiles.upload({
+                            file: fileState.file,
+                            onProgressChange: async (progress) => {
+                                updateFileProgress(fileState.key, progress);
+                                if (progress === 100) {
+                                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                                    updateFileProgress(fileState.key, 'COMPLETE');
+                                }
+                            },
+                        });
+                        uploadedImageURLs.push({ url: res.url, thumbnail: index === 0 });
+                    }
                 } catch (err) {
                     updateFileProgress(fileState.key, 'ERROR');
                 }
