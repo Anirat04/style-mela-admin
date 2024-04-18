@@ -10,3 +10,7 @@
 ._contentEditable_13kqw_352 * {
     all: revert;
 }
+
+.aspect-square{
+    aspect-ratio: unset;
+}

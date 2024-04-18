@@ -7,9 +7,9 @@ import { useDropzone, type DropzoneOptions } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
 
 const variants = {
-    base: 'relative rounded-md aspect-square flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
+    base: 'relative rounded-md aspect-square flex justify-center items-center flex-col cursor-pointer min-h-[150px] grow border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
     image:
-        'border-0 p-0 w-full h-full relative shadow-md bg-slate-200 dark:bg-slate-900 rounded-md',
+        'border-0 p-0 h-full w-[274px] relative shadow-md bg-slate-200 dark:bg-slate-900 rounded-md',
     active: 'border-2',
     disabled:
         'bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700',
@@ -143,15 +143,16 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
 
         return (
             <div>
-                <div className="grid grid-cols-[repeat(1,1fr)] gap-2 sm:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] xl:grid-cols-[repeat(4,1fr)]">
+                {/* <div className="grid grid-cols-[repeat(1,1fr)] gap-2 sm:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] xl:grid-cols-[repeat(4,1fr)]"> */}
+                <div className="w-full min-h-[274px] h-full flex gap-2 flex-wrap">
                     {/* Images */}
                     {value?.map(({ file, progress }, index) => (
                         <div
                             key={index}
-                            className={variants.image + ' aspect-square h-full'}
+                            className={variants.image + ''}
                         >
                             <img
-                                className="h-full w-full rounded-md object-cover"
+                                className="w-[274px] h-[274px] rounded-md object-cover"
                                 src={imageUrls[index]}
                                 alt={typeof file === 'string' ? file : file.name}
                             />
