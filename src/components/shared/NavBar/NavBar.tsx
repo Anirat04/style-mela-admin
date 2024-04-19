@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ToggleTheme from "../ToggleTheme/ToggleTheme";
 
 
 const NavBar = () => {
@@ -25,6 +26,9 @@ const NavBar = () => {
                                 /> */}
                                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Style Mela</span>
                             </a>
+                        </div>
+                        <div>
+                            <ToggleTheme></ToggleTheme>
                         </div>
                         <div className="flex items-center">
                             <div className="flex items-center ms-3">
