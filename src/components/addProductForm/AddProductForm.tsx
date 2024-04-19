@@ -12,17 +12,6 @@ import DescriptionComponent from '../DescriptionComponent/DescriptionComponent';
 
 
 // TODO: Ensure real data matching
-// type Inputs = {
-//     title: string;
-//     shortDescription: string;
-//     colors: { value: {}; label: string }[]; // Adjusted type for colors
-//     brand: string;
-//     materials: string;
-//     price: string;
-//     discount: number;
-//     listingCategory: []
-//     images: []
-// };
 type Inputs = {
     images: { url: string; thumbnail?: boolean | undefined; }[];
     title: string; shortDescription: string;
@@ -33,17 +22,18 @@ type Inputs = {
     discount: number;
     listingCategory: [];
     description: string;
+    stockQuantity: number;
 };
 
 const AddProductForm = () => {
     const [formData, setFormData] = useState<Inputs | null>(null);
-    const [initPrice, setInitPrice] = useState<number>();
-    const [discountPrice, setDiscountPrice] = useState<number>();
-    const [finalPrice, setFinalPrice] = useState(initPrice);
+    const [initPrice, setInitPrice] = useState<number | undefined>(undefined);
+    const [discountPrice, setDiscountPrice] = useState<number | undefined>(undefined);
+    const [finalPrice, setFinalPrice] = useState<any>(initPrice);
     const [receivedValue, setReceivedValue] = useState('');
     const [updatedFormData, setUpdatedFormData] = useState({ ...formData });
-    // console.log(initPrice);
-    // console.log(discountPrice);
+    console.log(initPrice);
+    console.log(discountPrice);
 
     // for multiple images upload
     const [fileStates, setFileStates] = useState<FileState[]>([]);
@@ -118,9 +108,12 @@ const AddProductForm = () => {
     }
 
     // Call handleFinalPrice whenever initPrice or discountPrice changes
+    // Call handleFinalPrice whenever initPrice or discountPrice changes
     useEffect(() => {
         if (initPrice !== undefined && discountPrice !== undefined) {
             handleFinalPrice(initPrice, discountPrice);
+        } else {
+            setFinalPrice(initPrice); // Set final price to undefined if either initPrice or discountPrice is undefined
         }
     }, [initPrice, discountPrice]);
 
@@ -211,8 +204,12 @@ const AddProductForm = () => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
+                <div className='bg-white p-5 rounded-md text-3xl font-semibold shadow-lg text-center'>
+                    <p>Add Prduct Form</p>
+                </div>
+
                 {/* Image Uploading Div */}
-                <div>
+                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
                     <div>
                         <div>
                             <Controller
@@ -235,133 +232,237 @@ const AddProductForm = () => {
                     </div>
                 </div>
 
-                {/* Title */}
-                <div>
-                    <input defaultValue="" placeholder='Type your title here' {...register("title")} />
-                </div>
-
-                {/* Brand */}
-                <div>
-                    <Controller
-                        control={control}
-                        name="brand"
-                        render={({ field: { onChange } }) => (
-                            <CreatableSelect
-                                isClearable
-                                onChange={onChange}
-                                placeholder="Select or Add a brand"
-                            // TODO: Add proper options for brand names
-                            // options={colourOptions}
+                {/* Product Informations title, short description & description */}
+                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl'>
+                        <p>Product Informations</p>
+                    </div>
+                    <div className='grid gap-5 pb-5'>
+                        {/* Title */}
+                        <div>
+                            <label
+                                htmlFor="title"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Title
+                            </label>
+                            <input
+                                className='px-3 py-2 outline-0p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-0'
+                                placeholder='Product Title'
+                                {...register("title")}
                             />
-                        )}
-                    />
-                </div>
-                {/* Choose Colors */}
-                <div>
-                    <Controller
-                        control={control}
-                        name="colors"
-                        render={({ field: { onChange } }) => (
-                            <Select
-                                placeholder="Select product color variants"
-                                closeMenuOnSelect={false}
-                                isMulti
-                                options={colourOptions}
-                                styles={colourStyles}
-                                onChange={onChange}
+                        </div>
+
+                        {/* Short Description */}
+                        <div>
+                            <label
+                                htmlFor="shortDescription"
+                                className="block mb-1  font-medium text-gray-900 dark:text-white">
+                                Short Description
+                            </label>
+                            <textarea
+                                id="shortDescription"
+                                className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-0"
+                                placeholder="Type here..."
+                                {...register("shortDescription", { required: true, minLength: 5, maxLength: 10 })}
                             />
-                        )}
-                    />
+                            {errors.shortDescription && errors.shortDescription.type === "required" && <span>This is required</span>}
+                            {errors.shortDescription && errors.shortDescription.type === "maxLength" && <span>Max length exceeded</span>}
+                            {errors.shortDescription && errors.shortDescription.type === "minLength" && <span>Min length exceeded</span>}
+                        </div>
+
+                        {/* Description editor starts here */}
+                        <div>
+                            <label
+                                htmlFor="DetailedDescription"
+                                className="block mb-1  font-medium text-gray-900 dark:text-white">
+                                Detailed Description
+                            </label>
+                            <DescriptionComponent sendValueToParent={handleValueReceived} ></DescriptionComponent>
+                        </div>
+                        {/* Description editor ends here */}
+                    </div>
                 </div>
-                {/* Choose materials */}
-                <div>
-                    <Controller
-                        control={control}
-                        name="materials"
-                        render={({ field: { onChange } }) => (
-                            <Select
-                                placeholder="Select materials"
-                                isMulti
-                                onChange={onChange} // send value to hook form
-                                // selected={value}
-                                options={materialOptions}
+
+
+                {/* Aditional informations Brand, Colors, Materials, Category */}
+                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl'>
+                        <p>Aditional Informations</p>
+                    </div>
+                    <div className='grid grid-cols-2 gap-5 pb-5'>
+                        {/* Brand */}
+                        <div>
+                            <label
+                                htmlFor="brand"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Brand
+                            </label>
+                            <Controller
+                                control={control}
+                                name="brand"
+                                render={({ field: { onChange } }) => (
+                                    <CreatableSelect
+                                        isClearable
+                                        onChange={onChange}
+                                        placeholder="Select or Add a brand"
+                                    // TODO: Add proper options for brand names
+                                    // options={colourOptions}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                </div>
-                {/* Choose Product category */}
-                <div>
-                    <Controller
-                        control={control}
-                        name="listingCategory"
-                        render={({ field: { onChange } }) => (
-                            <Select
-                                placeholder="Select Category"
-                                isMulti
-                                onChange={onChange} // send value to hook form
-                                // selected={value}
-                                options={categoryData}
+                        </div>
+                        {/* Choose Colors */}
+                        <div>
+                            <label
+                                htmlFor="colors"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Colors
+                            </label>
+                            <Controller
+                                control={control}
+                                name="colors"
+                                render={({ field: { onChange } }) => (
+                                    <Select
+                                        placeholder="Select product color variants"
+                                        closeMenuOnSelect={false}
+                                        isMulti
+                                        options={colourOptions}
+                                        styles={colourStyles}
+                                        onChange={onChange}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+                        </div>
+                        {/* Choose materials */}
+                        <div>
+                            <label
+                                htmlFor="materials"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Materials
+                            </label>
+                            <Controller
+                                control={control}
+                                name="materials"
+                                render={({ field: { onChange } }) => (
+                                    <Select
+                                        placeholder="Select materials"
+                                        isMulti
+                                        onChange={onChange} // send value to hook form
+                                        // selected={value}
+                                        options={materialOptions}
+                                    />
+                                )}
+                            />
+                        </div>
+                        {/* Choose Product category */}
+                        <div>
+                            <label
+                                htmlFor="Category"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Category
+                            </label>
+                            <Controller
+                                control={control}
+                                name="listingCategory"
+                                render={({ field: { onChange } }) => (
+                                    <Select
+                                        placeholder="Select Category"
+                                        isMulti
+                                        onChange={onChange} // send value to hook form
+                                        // selected={value}
+                                        options={categoryData}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
                 </div>
 
-
-                {/* Short Description */}
-                <div>
-                    {/* <input type='text' placeholder='Type a short description for your product' {...register("shortDescription")} /> */}
-                    <textarea id='shortDescription' placeholder='Type a short description for your product' {...register("shortDescription", { required: true, minLength: 5, maxLength: 10 })} />
-                    {errors.shortDescription && errors.shortDescription.type === "required" && <span>This is required</span>}
-                    {errors.shortDescription && errors.shortDescription.type === "maxLength" && <span>Max length exceeded</span>}
-                    {errors.shortDescription && errors.shortDescription.type === "minLength" && <span>Min length exceeded</span>}
+                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl'>
+                        <p>Price & Stock</p>
+                    </div>
+                    <div className='grid grid-cols-2 gap-2'>
+                        {/* Input Price */}
+                        <div>
+                            <label
+                                htmlFor="Price"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Price
+                            </label>
+                            <input
+                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                type="number"
+                                min={0}
+                                {...register("price", { valueAsNumber: true, min: 0 })}
+                                placeholder='BDT'
+                                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const newValue = parseFloat(e.target.value);
+                                    setInitPrice(isNaN(newValue) ? undefined : newValue);
+                                }}
+                            />
+                            {errors.price && <span>There is an error</span> as JSX.Element}
+                        </div>
+                        {/* Discount */}
+                        <div>
+                            <label
+                                htmlFor="Discout Percentage"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Discout Percentage
+                            </label>
+                            <input
+                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                type="number"
+                                min={0}
+                                max={100}
+                                placeholder='Discount %' {...register("discount", { valueAsNumber: true, min: 0, max: 100 })}
+                                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const newValue = parseFloat(e.target.value);
+                                    setDiscountPrice(isNaN(newValue) ? undefined : newValue);
+                                }}
+                            />
+                        </div>
+                        {/* Final Price After discount */}
+                        <div>
+                            <label
+                                htmlFor="Final Price"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Final Price
+                            </label>
+                            <input
+                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                type="text"
+                                readOnly
+                                placeholder='Price After Discount'
+                                value={finalPrice !== undefined ? finalPrice.toString() : ''}
+                            />
+                        </div>
+                        {/* Stock quantity */}
+                        <div>
+                            <label
+                                htmlFor="Stock Quantity"
+                                className="block mb-1 font-medium text-gray-900 dark:text-white">
+                                Stock Quantity
+                            </label>
+                            <input
+                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                type="number"
+                                min={0}
+                                {...register("stockQuantity", { valueAsNumber: true, min: 0 })}
+                                placeholder='Quantity'
+                            />
+                            {errors.price && <span>There is an error</span> as JSX.Element}
+                        </div>
+                    </div>
                 </div>
-
-
-                {/* Input Price */}
-                <div>
+                <div className='bg-white mt-6 rounded-md shadow-xl mb-12'>
                     <input
-                        type="number"
-                        min={0}
-                        {...register("price", { valueAsNumber: true, min: 0 })}
-                        placeholder='BDT'
-                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const newValue = parseFloat(e.target.value);
-                            setInitPrice(isNaN(newValue) ? undefined : newValue);
-                        }}
-                    />
-                    {errors.price && <span>There is an error</span> as JSX.Element}
-                </div>
-                {/* Discount */}
-                <div>
-                    <input
-                        type="number"
-                        min={0}
-                        max={100}
-                        placeholder='Discount %' {...register("discount", { valueAsNumber: true, min: 0, max: 100 })}
-                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const newValue = parseFloat(e.target.value);
-                            setDiscountPrice(isNaN(newValue) ? undefined : newValue);
-                        }}
+                        className='w-full p-5 text-3xl'
+                        type="submit"
                     />
                 </div>
-                {/* Final Price After discount */}
-                <div>
-                    <input
-                        type="text"
-                        readOnly
-                        placeholder='Price After Discount'
-                        value={finalPrice !== undefined ? finalPrice.toString() : ''}
-                    />
-                </div>
-                {/* Description editor starts here */}
-                <div>
-                    <DescriptionComponent sendValueToParent={handleValueReceived} ></DescriptionComponent>
-                </div>
-                {/* Description editor ends here */}
-
-                <input type="submit" />
-            </form>
-        </div>
+            </form >
+        </div >
     );
 };
 

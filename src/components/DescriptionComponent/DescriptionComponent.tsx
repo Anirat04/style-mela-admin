@@ -12,9 +12,7 @@ import marked from 'marked';
 
 
 const DescriptionComponent = ({ sendValueToParent }) => {
-    const [markdown, setMarkdown] = useState(`
-        Hello **world**!
-    `);
+    const [markdown, setMarkdown] = useState(``);
 
 
 
@@ -53,11 +51,7 @@ const DescriptionComponent = ({ sendValueToParent }) => {
 
     return (
         <div>
-            <div className='no-tailwind'>
-
-                <h1 className=''>This is demo Description</h1>
-            </div>
-            <div className='border max-w-[1000px] mx-auto '>
+            <div className='border rounded-md'>
 
                 <ForwardRefEditor
                     markdown={markdown}
@@ -65,17 +59,6 @@ const DescriptionComponent = ({ sendValueToParent }) => {
                 >
                 </ForwardRefEditor>
             </div>
-            {/* <div className='border max-w-[1000px] mx-auto no-tailwind'>
-                <Markdown>{markdown}</Markdown>
-            </div> */}
-            {/* <div className='border max-w-[1000px] mx-auto no-tailwind mt-8'>
-                <button
-                    className=''
-                    onClick={postData}
-                >
-                    Submit
-                </button>
-            </div> */}
         </div >
     );
 };

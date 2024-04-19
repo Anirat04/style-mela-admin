@@ -6,10 +6,10 @@ const AddProduct = () => {
     return (
         <>
             <div
-                className='min-h-screen -mt-14 pt-14'
+                className='min-h-screen -mt-14 pt-14 bg-[#f5f5f5]'
             >
                 {/* Form Container */}
-                <div className='bg-white max-w-[1200px] mx-auto p-8 mt-8 border rounded-xl shadow-lg'>
+                <div className='max-w-[1200px] mx-auto p-8 mt-8 rounded-xl'>
                     <AddProductForm></AddProductForm>
                 </div>
             </div>
