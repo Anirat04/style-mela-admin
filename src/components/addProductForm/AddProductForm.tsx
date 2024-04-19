@@ -32,8 +32,8 @@ const AddProductForm = () => {
     const [finalPrice, setFinalPrice] = useState<any>(initPrice);
     const [receivedValue, setReceivedValue] = useState('');
     const [updatedFormData, setUpdatedFormData] = useState({ ...formData });
-    console.log(initPrice);
-    console.log(discountPrice);
+    // console.log(initPrice);
+    // console.log(discountPrice);
 
     // for multiple images upload
     const [fileStates, setFileStates] = useState<FileState[]>([]);

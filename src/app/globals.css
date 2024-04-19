@@ -10,12 +10,8 @@
 
 ._contentEditable_13kqw_352 * {
     all: revert;
-    height: 200px !important;
 }
 
-._contentEditable_13kqw_352 {
-    height: 200px;
-}
 
 .aspect-square {
     aspect-ratio: unset;
