@@ -11,7 +11,7 @@ import marked from 'marked';
 // `
 
 
-const DescriptionComponent = ({ sendValueToParent }) => {
+const DescriptionComponent = ({ sendValueToParent }: any) => {
     const [markdown, setMarkdown] = useState(``);
 
 

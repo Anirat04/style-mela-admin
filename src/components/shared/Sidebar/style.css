@@ -1,7 +1,13 @@
-.active {
-    background-color: #334155;
-}
+/* For light mode */
+/* .active {
+    background-color: #f5f5f5;
+} */
 
-.active .link-icon{
+/* For dark mode */
+/* .active :light {
+    background-color: #334155;
+} */
+
+.active .link-icon {
     color: white;
 }

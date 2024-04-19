@@ -6,7 +6,7 @@ const AddProduct = () => {
     return (
         <>
             <div
-                className='min-h-screen -mt-14 pt-14 bg-[#f5f5f5]'
+                className='min-h-screen -mt-14 pt-14 bg-[#f5f5f5] dark:bg-gray-700'
             >
                 {/* Form Container */}
                 <div className='max-w-[1200px] mx-auto p-8 mt-8 rounded-xl'>

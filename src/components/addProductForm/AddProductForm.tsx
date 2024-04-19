@@ -204,12 +204,12 @@ const AddProductForm = () => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='bg-white p-5 rounded-md text-3xl font-semibold shadow-lg text-center'>
+                <div className='bg-white dark:bg-gray-800 dark:text-white p-5 rounded-md text-3xl font-semibold shadow-lg text-center'>
                     <p>Add Prduct Form</p>
                 </div>
 
                 {/* Image Uploading Div */}
-                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
+                <div className='bg-white dark:bg-gray-800 rounded-md shadow-lg p-5 mt-6'>
                     <div>
                         <div>
                             <Controller
@@ -233,8 +233,8 @@ const AddProductForm = () => {
                 </div>
 
                 {/* Product Informations title, short description & description */}
-                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
-                    <div className='font-medium my-3 text-2xl'>
+                <div className='bg-white dark:bg-gray-800 rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl text-gray-900 dark:text-white'>
                         <p>Product Informations</p>
                     </div>
                     <div className='grid gap-5 pb-5'>
@@ -246,7 +246,7 @@ const AddProductForm = () => {
                                 Title
                             </label>
                             <input
-                                className='px-3 py-2 outline-0p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-0'
+                                className='px-3 py-2 outline-0p-2.5 w-full text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 dark:placeholder-gray-400 outline-0'
                                 placeholder='Product Title'
                                 {...register("title")}
                             />
@@ -261,7 +261,7 @@ const AddProductForm = () => {
                             </label>
                             <textarea
                                 id="shortDescription"
-                                className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-0"
+                                className="block p-2.5 w-full text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 dark:placeholder-gray-400 outline-0"
                                 placeholder="Type here..."
                                 {...register("shortDescription", { required: true, minLength: 5, maxLength: 10 })}
                             />
@@ -284,10 +284,11 @@ const AddProductForm = () => {
                 </div>
 
 
-                {/* Aditional informations Brand, Colors, Materials, Category */}
-                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
-                    <div className='font-medium my-3 text-2xl'>
-                        <p>Aditional Informations</p>
+
+                {/* Additional informations Brand, Colors, Materials, Category */}
+                <div className='bg-white dark:bg-gray-800 rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl text-gray-900 dark:text-white'>
+                        <p>Additional Informations</p>
                     </div>
                     <div className='grid grid-cols-2 gap-5 pb-5'>
                         {/* Brand */}
@@ -378,8 +379,10 @@ const AddProductForm = () => {
                     </div>
                 </div>
 
-                <div className='bg-white rounded-md shadow-lg p-5 mt-6'>
-                    <div className='font-medium my-3 text-2xl'>
+
+                {/* Price and Stock */}
+                <div className='bg-white dark:bg-gray-800 rounded-md shadow-lg p-5 mt-6'>
+                    <div className='font-medium my-3 text-2xl text-gray-900 dark:text-white'>
                         <p>Price & Stock</p>
                     </div>
                     <div className='grid grid-cols-2 gap-2'>
@@ -391,7 +394,7 @@ const AddProductForm = () => {
                                 Price
                             </label>
                             <input
-                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                className='w-full border border-gray-300 dark:border-gray-600 rounded-[3px] outline-0 px-2 h-[36px] dark:bg-gray-700 dark:text-white'
                                 type="number"
                                 min={0}
                                 {...register("price", { valueAsNumber: true, min: 0 })}
@@ -408,10 +411,10 @@ const AddProductForm = () => {
                             <label
                                 htmlFor="Discout Percentage"
                                 className="block mb-1 font-medium text-gray-900 dark:text-white">
-                                Discout Percentage
+                                Discount Percentage
                             </label>
                             <input
-                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                className='w-full border border-gray-300 dark:border-gray-600 rounded-[3px] outline-0 px-2 h-[36px] dark:bg-gray-700 dark:text-white'
                                 type="number"
                                 min={0}
                                 max={100}
@@ -430,7 +433,7 @@ const AddProductForm = () => {
                                 Final Price
                             </label>
                             <input
-                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                className='w-full border border-gray-300 dark:border-gray-600 rounded-[3px] outline-0 px-2 h-[36px] dark:bg-gray-700 dark:text-white'
                                 type="text"
                                 readOnly
                                 placeholder='Price After Discount'
@@ -445,7 +448,7 @@ const AddProductForm = () => {
                                 Stock Quantity
                             </label>
                             <input
-                                className='w-full border border-[#cccccc] rounded-[3px] outline-0 px-2 h-[36px]'
+                                className='w-full border border-gray-300 dark:border-gray-600 rounded-[3px] outline-0 px-2 h-[36px] dark:bg-gray-700 dark:text-white'
                                 type="number"
                                 min={0}
                                 {...register("stockQuantity", { valueAsNumber: true, min: 0 })}
@@ -455,9 +458,10 @@ const AddProductForm = () => {
                         </div>
                     </div>
                 </div>
-                <div className='bg-white mt-6 rounded-md shadow-xl mb-12'>
+
+                <div className='bg-white dark:bg-gray-800 mt-6 rounded-md shadow-xl mb-12'>
                     <input
-                        className='w-full p-5 text-3xl'
+                        className='w-full p-5 text-3xl dark:text-white'
                         type="submit"
                     />
                 </div>
