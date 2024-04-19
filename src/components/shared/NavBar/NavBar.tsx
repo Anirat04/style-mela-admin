@@ -24,7 +24,9 @@ const NavBar = () => {
                                     width={32}
                                     height={32}
                                 /> */}
-                                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Style Mela</span>
+                                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+                                    Style Mela
+                                </span>
                             </a>
                         </div>
                         <div>
