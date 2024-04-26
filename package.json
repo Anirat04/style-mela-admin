@@ -12,6 +12,7 @@
     "@edgestore/react": "^0.1.6",
     "@edgestore/server": "^0.1.6",
     "@mdxeditor/editor": "^2.20.3",
+    "axios": "^1.6.8",
     "chroma-js": "^2.4.2",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.8.0",

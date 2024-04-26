@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
@@ -9,6 +9,7 @@ import { FileState, MultiImageDropzone } from '@/components/ImageUpload/multi-im
 import { ColourOption, colourOptions } from '@/data/colorsData';
 import { categoryData } from '@/data/categoryData';
 import DescriptionComponent from '../DescriptionComponent/DescriptionComponent';
+import useAxiosPublic from '@/utils/Hooks/useAxiosPublic';
 
 
 // TODO: Ensure real data matching
@@ -200,6 +201,36 @@ const AddProductForm = () => {
 
     console.log(formData);
 
+
+    // Add Product
+    const AddProduct = useCallback(async () => {
+        try {
+            const ProductData = formData
+
+            const response = await fetch('http://localhost:5000/add-product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ProductData })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save Product data');
+            }
+
+            const data = await response.json();
+            console.log(data); // Response from the server
+        } catch (error) {
+            console.error('Error posting Product data:', error);
+        }
+    }, [formData]);
+
+    useEffect(() => {
+        if (formData !== null) {
+            AddProduct()
+        }
+    }, [AddProduct, formData])
 
     return (
         <div>
