@@ -294,7 +294,7 @@ const AddProductForm = () => {
                                 id="shortDescription"
                                 className="block p-2.5 w-full text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 dark:placeholder-gray-400 outline-0"
                                 placeholder="Type here..."
-                                {...register("shortDescription", { required: true, minLength: 5, maxLength: 10 })}
+                                {...register("shortDescription", { required: true, minLength: 30, maxLength: 500 })}
                             />
                             {errors.shortDescription && errors.shortDescription.type === "required" && <span>This is required</span>}
                             {errors.shortDescription && errors.shortDescription.type === "maxLength" && <span>Max length exceeded</span>}
